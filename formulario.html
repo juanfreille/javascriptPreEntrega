@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="JIF Style es una tienda online de indumentaria casual, homewear, streetwear, y ropa urbana. Prendas perdurables, en donde priman la comodidad y el estilo."
+    />
+    <meta
+      name="keywords"
+      content="ecommerce, hombre, remeras, camperas, jeans, pantalones, chombas, casmisas, descuentos, ofertas, eshop, indumentaria, ropa"
+    />
+    <title>JIF STYLE STORE - Agregar productos</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.28/dist/sweetalert2.all.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.28/dist/sweetalert2.min.css"
+      rel="stylesheet"
+    />
+    <link href="./styles.css" rel="stylesheet" type="text/css" />
+    <link
+      href="./img/favicon_io/favicon.ico"
+      rel="shortcut icon"
+      type="image/x-icon"
+    />
+    <script
+      src="https://kit.fontawesome.com/4e9044019f.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"
+    ></script>
+    <div class="minibar-top no-selection" style="font-weight: bold">
+      5% de descuento en compras mayores a 50.000
+    </div>
+    <!-- SECCION DEL HEADER Y NAVBAR -->
+    <header class="fuente-copada">
+      <!-- LOGO A AL IZQUIERDA -->
+      <a id="header__logo-pc" href="./index.html">
+        <img
+          src="./img/Logo-bg.webp"
+          width="84"
+          height="43"
+          alt="logo de jifstyle"
+        />
+      </a>
+      <!-- RESTO DEL MENU -->
+      <div class="header__links">
+        <nav>
+          <input type="checkbox" id="header__check" />
+          <label for="header__check" class="bar-btn">
+            <i class="fa fa-bars"></i>
+          </label>
+          <ul class="header__nav-menu texto-xs">
+            <li>
+              <a href="./formulario.html">
+                <i class="fa fa-envelope fa-mio"></i>Administrar Ropa (ADMIN)</a
+              </a>
+            </li>
+            <li>
+              <a href="./index.html">
+                <i class="fa fa-house fa-mio"></i>Tienda
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <!-- LOGO MOBILE AL CENTRO -->
+        <a id="header__logo-mobile" href="./index.html">
+          <img
+            src="./img/Logo-bg.webp"
+            width="85"
+            height="43"
+            alt="logo de jifstyle"
+          />
+        </a>
+        <!-- PANEL DE USUARIO, CARRITO, REGISTRAR NUEVO USUARIO O LOGUEARSE -->
+        <div class="vr ocultar-mobile vr-mio"></div>
+        <div class="header__nav-user">
+          <a href="./cart.html" class="carrito-text">
+            <img
+              src="./img/carrito.webp"
+              alt="carrito de compras"
+              class="imagen-carrito"
+            />
+            <div class="carrito-nav fuente-copada texto-xs">MI CARRITO</div>
+          </a>
+        </div>
+      </div>
+    </header>
+    <main>
+      <!-- SECCION ENCABEZADO -->
+      <div class="banner-encabezado centrar-texto">
+        <h1 class="encabezado-grande texto-xxl">tienda online</h1>
+      </div>
+      <h2 class="title fuente-copada">nuestra tienda</h2>
+    </main>
+    <div class="form-body">
+      <div class="row">
+        <div class="form-holder">
+          <div class="form-content">
+            <div class="form-items">
+              <h3>Agregar producto a la DB</h3>
+              <p>Completar los campos</p>
+              <form id="formularioAgregar" novalidate>
+                <div class="col-md-12">
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    placeholder="Nombre de producto"
+                    required
+                  />
+                </div>
+                <div class="col-md-12">
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="precio"
+                    name="precio"
+                    placeholder="Precio del articulo"
+                    required
+                  />
+                </div>
+                <div class="col-md-12">
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="imagen"
+                    name="imagen"
+                    placeholder="Ruta de imagen del producto"
+                    required
+                  />
+                  <label style="margin: 0 1% 1% 1%;"
+                    >Ingresar 'default' (sin comillas) si no tiene imagen</label
+                  >
+                </div>
+                <div class="col-md-12">
+                  <select class="form-select mt-3" required id="tipo">
+                    <option selected disabled value="">Seleccionar</option>
+                    <option value="pantalones">Pantalones</option>
+                    <option value="buzos">Buzos</option>
+                    <option value="remeras">Remeras</option>
+                    <option value="camperas">Camperas</option>
+                  </select>
+                </div>
+                <div class="form-button mt-3">
+                  <button
+                    id="btnAddProduct"
+                    type="submit"
+                    class="btn btn-primary"
+                  >
+                    Agregar producto
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="form-body">
+        <div class="row">
+          <div class="form-holder">
+            <div class="form-content">
+              <div class="form-items">
+                <h3>Eliminar producto de la DB</h3>
+                  <div class="col-md-12">
+                    <select class="form-select mt-3" required id="selectTipo">
+                      <option selected disabled value="">Seleccionar tipo</option>
+                    </select>
+                  </div>
+
+
+
+                  <div class="col-md-12">
+                    <select class="form-select mt-3" required id="selectNombre">
+                      <option selected disabled value="">Seleccionar producto</option>
+                      <option value="pantalones">Pantalones</option>
+                      <option value="buzos">Buzos</option>
+                      <option value="remeras">Remeras</option>
+                      <option value="camperas">Camperas</option>
+                    </select>
+                  </div>
+
+
+
+
+                  <div class="form-button mt-3">
+                    <button
+                      id="btnRemoveProduct"
+                      type="submit"
+                      class="btn btn-primary"
+                    >
+                      Eliminar producto
+                    </button>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- SECCION DEL FOOTER, DONDE UBICAMOS REDES SOCIALES, AGREGAR ENLACES MAS ADELANTE -->
+    <footer class="footer_style">
+      <a
+        href="https://www.facebook.com/jifstylestore/"
+        target="_blank"
+        class="fa fa-facebook"
+        aria-hidden="true"
+      ></a>
+      <a
+        href="https://twitter.com/jifstylestore"
+        target="_blank"
+        class="fa fa-twitter"
+        aria-hidden="true"
+      ></a>
+      <a
+        href="https://ar.linkedin.com/company/jifstyle"
+        target="_blank"
+        class="fa fa-linkedin"
+        aria-hidden="true"
+      ></a>
+      <a
+        href="https://www.youtube.com/channel"
+        target="_blank"
+        class="fa fa-youtube"
+        aria-hidden="true"
+      ></a>
+      <a
+        href="https://www.instagram.com/jifstylestore/"
+        target="_blank"
+        class="fa fa-instagram"
+        aria-hidden="true"
+      ></a>
+    </footer>
+    <script src="formulario.js"></script>
+  </body>
+</html>
