@@ -11,56 +11,56 @@ if (!dbProductos) {
       id: 1,
       nombre: "Pantalon Babucha",
       precio: 16500,
-      imagen: "./img/babucha.webp",
+      imagen: "../assets/img/babucha.webp",
       tipo: "pantalones",
     },
     {
       id: 2,
       nombre: "Pantalon Jeans",
       precio: 15500,
-      imagen: "./img/jeans.webp",
+      imagen: "../assets/img/jeans.webp",
       tipo: "pantalones",
     },
     {
       id: 3,
       nombre: "Pantalon Joggers",
       precio: 15500,
-      imagen: "./img/joggers.webp",
+      imagen: "../assets/img/joggers.webp",
       tipo: "pantalones",
     },
     {
       id: 4,
       nombre: "Pantalon Baggy",
       precio: 15500,
-      imagen: "./img/baggy.webp",
+      imagen: "../assets/img/baggy.webp",
       tipo: "pantalones",
     },
     {
       id: 5,
       nombre: "Buzo blue",
       precio: 16500,
-      imagen: "./img/buzo.webp",
+      imagen: "../assets/img/buzo.webp",
       tipo: "buzos",
     },
     {
       id: 6,
       nombre: "Buzo escoces",
       precio: 16500,
-      imagen: "./img/camisa.webp",
+      imagen: "../assets/img/camisa.webp",
       tipo: "buzos",
     },
     {
       id: 7,
       nombre: "Sweater grey",
       precio: 12500,
-      imagen: "./img/sweater.webp",
+      imagen: "../assets/img/sweater.webp",
       tipo: "buzos",
     },
     {
       id: 8,
       nombre: "Canguro b&w",
       precio: 16500,
-      imagen: "./img/canguro.webp",
+      imagen: "../assets/img/canguro.webp",
       tipo: "buzos",
     },
   ];
@@ -149,7 +149,7 @@ formulario.addEventListener("submit", (e) => {
 
 // Función para obtener la ruta de la imagen por defecto
 function obtenerRutaImagen(ruta) {
-  const rutaPorDefecto = "./img/sinlogo.webp";
+  const rutaPorDefecto = "../assets/img/sinlogo.webp";
   if (ruta === "default") {
     return rutaPorDefecto;
   }

@@ -521,7 +521,7 @@ img {
       rgba(255, 255, 255, 0.2) 13%,
       rgba(255, 255, 255, 0) 63%
     ),
-    url(./img/locales.webp);
+    url(../img/locales.webp);
   background-position: 0 0, 50% 33%;
   background-repeat: repeat, no-repeat;
   background-size: auto, cover;
