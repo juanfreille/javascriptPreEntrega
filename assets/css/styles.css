@@ -349,6 +349,7 @@ img {
   text-decoration: none;
   display: inline-flex;
   padding: 13px 10px;
+  position: relative;
 }
 
 .carrito-text .imagen-carrito {
@@ -823,6 +824,7 @@ figcaption {
   #header__check:checked ~ .bar-btn i::before {
     content: "\f00d";
     animation: slideIn 1.5s ease-in-out forwards;
+    -webkit-animation: slideIn 1.5s ease-in-out forwards;
   }
   .ocultar-mobile {
     display: none;
@@ -1148,4 +1150,19 @@ figcaption {
 
 .s5 {
   text-align: end;
+}
+
+#numeroCarrito {
+  position: absolute;
+  top: 13%;
+  left: 22%;
+  background: red;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  padding: 2px;
 }

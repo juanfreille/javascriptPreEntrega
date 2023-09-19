@@ -13,6 +13,7 @@ function sumarCantidadCarrito(carrito) {
 
 const subtotal = document.querySelector("#subtotal");
 const columna2 = document.querySelector("#columna2");
+const numeroCarrito = document.querySelector("#numeroCarrito");
 
 // Verificar elementos en el carrito al cargar la página
 window.onpageshow = function () {
@@ -30,6 +31,7 @@ function renderizarCarrito() {
   let descuento =
     contador >= 50000 ? parseInt((contador * 0.05).toFixed(0)) : 0;
   let total = contador - descuento;
+  numeroCarrito.innerHTML = cantidadCarrito;
 
   if (carrito.length > 0) {
     let carritoHTML2 = "";

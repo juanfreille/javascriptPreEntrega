@@ -1,6 +1,6 @@
 // Obtener el objeto localStorage
 const miLocalStorage = window.localStorage;
-
+// const dbProductos = JSON.parse(localStorage.getItem('nombreDelArray')) || [];
 // Obtener el arreglo de productos del localStorage
 let dbProductos = JSON.parse(miLocalStorage.getItem("dbProductos"));
 
@@ -71,6 +71,13 @@ if (!dbProductos) {
   // Asignar el arreglo inicial a la variable dbProductos
   dbProductos = dbProductosInicial;
 }
+const numeroCarrito = document.querySelector("#numeroCarrito");
+let carrito = JSON.parse(miLocalStorage.getItem("carrito")) || [];
+const cantidadCarrito = sumarCantidadCarrito(carrito);
+numeroCarrito.innerHTML = cantidadCarrito;
+
+// document.addEventListener("DOMContentLoaded", function () {
+// });
 
 // Obtener los elementos del formulario
 const formulario = document.querySelector("#formularioAgregar");
@@ -80,8 +87,14 @@ const imagen = document.querySelector("#imagen");
 const tipo = document.querySelector("#tipo");
 const btnAddProduct = document.querySelector("#btnAddProduct");
 const btnRemoveProduct = document.querySelector("#btnRemoveProduct");
+
 let selectTipo = document.querySelector("#selectTipo");
 let selectNombre = document.querySelector("#selectNombre");
+
+// Función para sumar la cantidad de productos en el carrito
+function sumarCantidadCarrito(carrito) {
+  return carrito.reduce((suma, producto) => suma + producto.cantidad, 0);
+}
 
 // Agregar un evento de escucha al formulario para agregar un nuevo elemento
 formulario.addEventListener("submit", (e) => {
