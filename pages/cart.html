@@ -24,6 +24,12 @@
       href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.28/dist/sweetalert2.min.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+
     <link href="../assets/css/styles.css" rel="stylesheet" type="text/css" />
     <link
       href="../assets/img/favicon_io/favicon.ico"
@@ -66,11 +72,11 @@
             <li>
               <a href="../pages/formulario.html">
                 <i class="fa fa-envelope fa-mio"></i>Administrar Ropa (ADMIN)</a
-              </a>
+              >
             </li>
             <li>
               <a href="../pages/index.html">
-                <i class="fa fa-house fa-mio"></i>Tienda
+                <i class="fa fa-shop fa-mio"></i>Tienda
               </a>
             </li>
           </ul>
@@ -92,7 +98,7 @@
               src="../assets/img/carrito.webp"
               alt="carrito de compras"
               class="imagen-carrito"
-            />            
+            />
             <span id="numeroCarrito" class="badge rounded-circle">0</span>
 
             <div class="carrito-nav fuente-copada texto-xs">MI CARRITO</div>
@@ -111,7 +117,65 @@
     <div class="container">
       <div class="row">
         <div id="columna"></div>
-        <div id="columna2"></div>
+        <div id="columna2">
+          <div class="checkCol2-21">
+            <div class="popCarritoCheck">
+              <div class="h6 fw-700">RESUMEN DE COMPRA</div>
+              <div id="cantiProd">(0 productos)</div>
+            </div>
+            <div
+              class="row mb-1"
+              style="
+                max-width: 350px;
+                margin: 0 auto;
+                width: 100%;
+                font-weight: 700;
+              "
+            >
+              <div class="col s7 px-0">Subtotal</div>
+              <div class="col s5 px-0 right-align" id="subtotal"></div>
+            </div>
+
+            <div id="columna3"></div>
+
+            <div
+              class="row mb-1"
+              style="
+                max-width: 350px;
+                margin: 0 auto;
+                width: 100%;
+                color: green;
+                font-weight: 700;
+              "
+              id="lineaDescuento"
+            ></div>
+
+            <div
+              class="row"
+              style="
+                margin: 2em 0 !important;
+                font-weight: bold;
+                max-width: 350px;
+                width: 100%;
+              "
+            >
+              <div class="col s7 px-0">TOTAL</div>
+              <div id="totalDesc" class="col s5 px-0 right-align">
+                $${total.toLocaleString(undefined)}
+              </div>
+            </div>
+
+            <div id="iniciarCompra">
+              <button
+                id="botonCompra"
+                class="botonCompra"
+                style="-webkit-text-stroke: 0.2px"
+              >
+                Iniciar Compra
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -148,6 +212,10 @@
         aria-hidden="true"
       ></a>
     </footer>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
     <script src="../js/cart.js"></script>
   </body>
 </html>

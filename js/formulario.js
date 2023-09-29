@@ -1,108 +1,85 @@
 // Obtener el objeto localStorage
 const miLocalStorage = window.localStorage;
-// const dbProductos = JSON.parse(localStorage.getItem('nombreDelArray')) || [];
-// Obtener el arreglo de productos del localStorage
-let dbProductos = JSON.parse(miLocalStorage.getItem("dbProductos"));
 
-// Si no hay productos en el localStorage, crear un arreglo inicial y guardarlo en el localStorage
-if (!dbProductos) {
-  const dbProductosInicial = [
-    {
-      id: 1,
-      nombre: "Pantalon Babucha",
-      precio: 16500,
-      imagen: "../assets/img/babucha.webp",
-      tipo: "pantalones",
-    },
-    {
-      id: 2,
-      nombre: "Pantalon Jeans",
-      precio: 15500,
-      imagen: "../assets/img/jeans.webp",
-      tipo: "pantalones",
-    },
-    {
-      id: 3,
-      nombre: "Pantalon Joggers",
-      precio: 15500,
-      imagen: "../assets/img/joggers.webp",
-      tipo: "pantalones",
-    },
-    {
-      id: 4,
-      nombre: "Pantalon Baggy",
-      precio: 15500,
-      imagen: "../assets/img/baggy.webp",
-      tipo: "pantalones",
-    },
-    {
-      id: 5,
-      nombre: "Buzo blue",
-      precio: 16500,
-      imagen: "../assets/img/buzo.webp",
-      tipo: "buzos",
-    },
-    {
-      id: 6,
-      nombre: "Buzo escoces",
-      precio: 16500,
-      imagen: "../assets/img/camisa.webp",
-      tipo: "buzos",
-    },
-    {
-      id: 7,
-      nombre: "Sweater grey",
-      precio: 12500,
-      imagen: "../assets/img/sweater.webp",
-      tipo: "buzos",
-    },
-    {
-      id: 8,
-      nombre: "Canguro b&w",
-      precio: 16500,
-      imagen: "../assets/img/canguro.webp",
-      tipo: "buzos",
-    },
-  ];
+// Arreglo para almacenar los productos
+let dbProductos = [];
 
-  // Guardar el arreglo inicial en el localStorage
-  miLocalStorage.setItem("dbProductos", JSON.stringify(dbProductosInicial));
+// Dirección de la API
+const apiAddress = "https://650de701a8b42265ec2ccfd9.mockapi.io/dbProductos";
 
-  // Asignar el arreglo inicial a la variable dbProductos
-  dbProductos = dbProductosInicial;
-}
-const numeroCarrito = document.querySelector("#numeroCarrito");
+// Tomar el documento
+const $d = document;
+
+// Elemento que muestra la cantidad de productos en el carrito
+const numeroCarrito = $d.querySelector("#numeroCarrito");
+
+// Obtener el carrito del localStorage
 let carrito = JSON.parse(miLocalStorage.getItem("carrito")) || [];
+
+// Calcular la cantidad de productos en el carrito
 const cantidadCarrito = sumarCantidadCarrito(carrito);
-numeroCarrito.innerHTML = cantidadCarrito;
 
-// document.addEventListener("DOMContentLoaded", function () {
-// });
+// Mostrar la cantidad de productos en el carrito
+numeroCarrito.textContent = cantidadCarrito;
 
-// Obtener los elementos del formulario
-const formulario = document.querySelector("#formularioAgregar");
-const nombre = document.querySelector("#nombre");
-const precio = document.querySelector("#precio");
-const imagen = document.querySelector("#imagen");
-const tipo = document.querySelector("#tipo");
-const btnAddProduct = document.querySelector("#btnAddProduct");
-const btnRemoveProduct = document.querySelector("#btnRemoveProduct");
+// Obtener los elementos del formulario y los selectores
+const formulario = $d.querySelector("#formularioAgregar");
+const nombre = $d.querySelector("#nombre");
+const precio = $d.querySelector("#precio");
+const imagen = $d.querySelector("#imagen");
+const tipo = $d.querySelector("#tipo");
+const stocks = $d.querySelector("#stocks");
+const btnAddProduct = $d.querySelector("#btnAddProduct");
+const btnRemoveProduct = $d.querySelector("#btnRemoveProduct");
+let selectTipo = $d.querySelector("#selectTipo");
+let selectNombre = $d.querySelector("#selectNombre");
 
-let selectTipo = document.querySelector("#selectTipo");
-let selectNombre = document.querySelector("#selectNombre");
+// Cargar los productos de la API al cargar la página
+$d.addEventListener("DOMContentLoaded", llenarDBProductos);
 
 // Función para sumar la cantidad de productos en el carrito
 function sumarCantidadCarrito(carrito) {
   return carrito.reduce((suma, producto) => suma + producto.cantidad, 0);
 }
 
-// Agregar un evento de escucha al formulario para agregar un nuevo elemento
-formulario.addEventListener("submit", (e) => {
-  e.preventDefault();
+// Obtener los datos de la API y cargar los productos en el select y filtrar
+async function llenarDBProductos() {
+  const response = await fetch(apiAddress);
+  if (response.ok) {
+    const data = await response.json();
+    dbProductos = data;
+    renderizarSelectTipo();
+    filtrarOpciones();
+  } else {
+    mostrarError("Error al obtener los datos de la API");
+  }
+}
 
+// Guardar un nuevo producto en la base de datos
+async function guardarDBProductos(nuevoElemento) {
+  const response = await fetch(apiAddress, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(nuevoElemento),
+  });
+  if (response.ok) {
+    const data = await response.json();
+    console.log(data);
+    // Mostrar una alerta indicando que se ha agregado un nuevo elemento a la base de datos
+    mostrarAlerta(`'${data.nombre}' ha sido agregado!`, "success");
+    llenarDBProductos();
+  } else {
+    mostrarError("Error al guardar el producto");
+  }
+}
+
+// Agregar un evento de escucha al formulario para agregar un nuevo elemento
+formulario.addEventListener("submit", async (e) => {
+  e.preventDefault();
   // Obtener la ruta de la imagen por defecto
   const imagenPorDefecto = obtenerRutaImagen(imagen.value);
-
   // Crear un nuevo objeto con los valores del formulario
   const nuevoElemento = {
     id: dbProductos.length + 1,
@@ -110,52 +87,27 @@ formulario.addEventListener("submit", (e) => {
     precio: parseInt(precio.value),
     imagen: imagenPorDefecto,
     tipo: tipo.value,
+    stock: stocks.value,
   };
-
   // Validar el formulario
   const errores = validarFormulario();
   if (errores.length > 0) {
     // Mostrar errores en una alerta
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      html: errores.join("<br>"),
-    });
+    mostrarErrores(errores);
   } else {
-    // Agregar el nuevo elemento al arreglo de productos
-    dbProductos.push(nuevoElemento);
-
-    // Mostrar una alerta indicando que se ha agregado un nuevo elemento a la base de datos
-    const Toast = Swal.mixin({
-      toast: true,
-      position: "center-end",
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener("mouseenter", Swal.stopTimer);
-        toast.addEventListener("mouseleave", Swal.resumeTimer);
-      },
-    });
-    Toast.fire({
-      icon: "success",
-      title: "Producto agregado!",
-    });
-
-    // Mostrar el arreglo de productos actualizado en la consola
-    console.log(dbProductos);
-
-    // Guardar el arreglo de productos actualizado en el localStorage
-    miLocalStorage.setItem("dbProductos", JSON.stringify(dbProductos));
-
-    // Limpiar los valores del formulario
-    nombre.value = "";
-    precio.value = "";
-    imagen.value = "";
-    tipo.value = "";
-
+    const productoExistente = dbProductos.find(
+      (producto) => producto.nombre === nuevoElemento.nombre
+    );
+    // Corroborar si es un elemento nuevo o es para actualizar
+    if (productoExistente) {
+      enviarDataForm(productoExistente, nuevoElemento);
+    } else {
+      // Guardar el nuevo elemento en la base de datos
+      await guardarDBProductos(nuevoElemento);
+    }
+    limpiarFormulario();
     // Actualizar el selectTipo y selectNombre
-    rederizarSelectTipo();
+    renderizarSelectTipo();
     filtrarOpciones();
   }
 });
@@ -168,12 +120,6 @@ function obtenerRutaImagen(ruta) {
   }
   return ruta;
 }
-
-// Función que se ejecuta cuando se carga o recarga la página
-window.onpageshow = function () {
-  rederizarSelectTipo();
-  filtrarOpciones();
-};
 
 // Función para validar los valores ingresados en el formulario
 function validarFormulario() {
@@ -192,20 +138,22 @@ function validarFormulario() {
   if (tipo.value.trim() === "") {
     errores.push("El tipo de producto es obligatorio");
   }
+  if (stocks.value.trim() === "") {
+    errores.push("El stock es obligatorio");
+  } else if (isNaN(parseInt(stocks.value))) {
+    errores.push("Debe ser un número");
+  }
   return errores;
 }
 
 // Función para renderizar las opciones del selectTipo
-function rederizarSelectTipo() {
+function renderizarSelectTipo() {
   selectTipo.innerHTML = "";
-
   // Obtener opciones únicas de tipos de productos
   const opcionesUnicas = [...new Set(dbProductos.map((opcion) => opcion.tipo))];
-  console.log(opcionesUnicas);
-
   // Crear opciones en el selectTipo
   opcionesUnicas.forEach((opcion) => {
-    const option = document.createElement("option");
+    const option = $d.createElement("option");
     option.text = opcion.charAt(0).toUpperCase() + opcion.slice(1);
     option.value = opcion;
     option.classList.add(opcion.clase);
@@ -217,18 +165,15 @@ function rederizarSelectTipo() {
 function filtrarOpciones() {
   // Obtener el valor seleccionado en el selectTipo
   const tipoSeleccionado = selectTipo.value;
-
   // Filtrar los productos por el tipo seleccionado
   const productosFiltrados = dbProductos.filter(
     (producto) => producto.tipo === tipoSeleccionado
   );
-
   // Limpiar las opciones actuales del selectNombre
   selectNombre.innerHTML = "";
-
   // Crear las nuevas opciones basadas en los productos filtrados
   productosFiltrados.forEach((producto) => {
-    const opcion = document.createElement("option");
+    const opcion = $d.createElement("option");
     opcion.value = producto.id;
     opcion.textContent = producto.nombre;
     selectNombre.appendChild(opcion);
@@ -238,22 +183,111 @@ function filtrarOpciones() {
 // Agregar evento de cambio al selectTipo para filtrar las opciones del selectNombre
 selectTipo.addEventListener("change", filtrarOpciones);
 
-// Función para eliminar un producto
-function eliminarItem() {
-  // Obtener el valor seleccionado en el selectNombre (id)
-  const nombreSeleccionado = parseInt(selectNombre.value);
-
-  // Filtrar el arreglo de productos para eliminar el producto seleccionado
-  dbProductos = dbProductos.filter(
-    (producto) => producto.id !== nombreSeleccionado
+// Eliminar un producto
+async function eliminarItem() {
+  const nombreSeleccionado = selectNombre.value;
+  const index = dbProductos.findIndex(
+    (producto) => producto.id === nombreSeleccionado
   );
+  const productoEncontrado = dbProductos[index];
+  const productoStock = productoEncontrado.stock;
+  if (productoStock > 1) {
+    dbProductos[index].stock = productoStock - 1;
+    await eliminarItemAsync(nombreSeleccionado, productoStock - 1);
+  } else {
+    await eliminarProductoAsync(nombreSeleccionado);
+  }
+}
 
-  // Mostrar una alerta indicando que se ha eliminado un producto
+async function eliminarProductoAsync(id) {
+  const response = await fetch(`${apiAddress}/${id}`, {
+    method: "DELETE",
+  });
+  if (response.ok) {
+    const data = await response.json();
+    mostrarAlerta(`'${data.nombre}' ha sido eliminado!`, "success");
+    llenarDBProductos();
+  } else {
+    mostrarError("Error al eliminar el producto");
+  }
+}
+
+async function eliminarItemAsync(id, stockNuevo) {
+  const requestOptions = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ stock: stockNuevo }),
+  };
+  const response = await fetch(`${apiAddress}/${id}`, requestOptions);
+  if (response.ok) {
+    const data = await response.json();
+    mostrarAlerta(
+      `Ha eliminado 1 ${data.nombre} del inventario, aún quedan ${data.stock} en stock`,
+      "success"
+    );
+    llenarDBProductos();
+  } else {
+    mostrarError("Error al eliminar el producto");
+  }
+}
+
+function enviarDataForm(productoExistente, nuevoElemento) {
+  const editarElemento = {
+    id: productoExistente.id,
+    nombre: productoExistente.nombre,
+    precio: nuevoElemento.precio,
+    imagen: productoExistente.imagen,
+    tipo: productoExistente.tipo,
+    stock: parseInt(productoExistente.stock) + parseInt(nuevoElemento.stock),
+  };
+  console.log(productoExistente);
+  console.log(nuevoElemento);
+  editarProductoAsync(editarElemento.id, editarElemento);
+}
+
+async function editarProductoAsync(id, editarElemento) {
+  const resp = await fetch(`${apiAddress}/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(editarElemento),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data = await resp.json();
+  mostrarAlerta(`El producto '${data.nombre}' ha sido editado!`, "success");
+  llenarDBProductos();
+}
+
+// Agregar evento de clic al botón de eliminar producto
+btnRemoveProduct.addEventListener("click", eliminarItem);
+
+// Limpiar el formulario
+function limpiarFormulario() {
+  formulario.reset();
+}
+
+async function eliminarProducto(id) {
+  // Filtrar el arreglo de productos para eliminar el producto seleccionado del array
+  dbProductos = dbProductos.filter((producto) => producto.id !== id);
+  console.log(dbProductos);
+}
+
+// Mostrar errores en una alerta
+function mostrarErrores(errores) {
+  Swal.fire({
+    icon: "error",
+    title: "Oops...",
+    html: errores.join("<br>"),
+  });
+}
+
+// Mostrar un mensaje de error en una alerta
+function mostrarError(mensaje) {
   const Toast = Swal.mixin({
     toast: true,
     position: "center-end",
     showConfirmButton: false,
-    timer: 3000,
+    timer: 2500,
     timerProgressBar: true,
     didOpen: (toast) => {
       toast.addEventListener("mouseenter", Swal.stopTimer);
@@ -261,21 +295,29 @@ function eliminarItem() {
     },
   });
   Toast.fire({
-    icon: "success",
-    title: "Producto eliminado!",
+    icon: "error",
+    title: mensaje,
   });
-
-  // Actualizar el localStorage con el arreglo de productos actualizado
-  miLocalStorage.setItem("dbProductos", JSON.stringify(dbProductos));
-
-  // Actualizar el selectTipo y selectNombre
-  rederizarSelectTipo();
-  filtrarOpciones();
-
-  console.log(
-    `Se eliminó el producto con ID ${nombreSeleccionado} de dbProductos.`
-  );
 }
 
-// Agregar evento de clic al botón de eliminar producto
-btnRemoveProduct.addEventListener("click", eliminarItem);
+// Mostrar una alerta
+function mostrarAlerta(mensaje, icono) {
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "center-end",
+    customClass: {
+      popup: "colored-toast",
+    },
+    showConfirmButton: false,
+    timer: 2500,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
+  Toast.fire({
+    icon: icono,
+    html: `<label style='color: black;'>${mensaje}</label>`,
+  });
+}

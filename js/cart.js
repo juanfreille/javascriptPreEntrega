@@ -1,43 +1,104 @@
 // Obtener el objeto localStorage
 const miLocalStorage = window.localStorage;
-const carritoSelector2 = document.querySelector("#columna");
-let cantidadCarrito = 0;
+
+// Arreglo para almacenar los productos
+let dbProductos = [];
+
+// Dirección de la API
+const apiAddress = "https://650de701a8b42265ec2ccfd9.mockapi.io/dbProductos";
+
+// Tomar el documento
+const $d = document;
+
+// Elemento que muestra la cantidad de productos en el carrito
+const numeroCarrito = $d.querySelector("#numeroCarrito");
+
+// Obtener el carrito del localStorage
 let carrito = JSON.parse(miLocalStorage.getItem("carrito")) || [];
-let dbProductos = JSON.parse(miLocalStorage.getItem("dbProductos")) || [];
-let btnComprar = "";
+
+// Calcular la cantidad de productos en el carrito
+const cantidadCarrito = sumarCantidadCarrito(carrito);
+
+// Mostrar la cantidad de productos en el carrito
+numeroCarrito.textContent = cantidadCarrito;
+
+// Obtener los elementos del formulario
+const carritoSelector2 = $d.querySelector("#columna");
+const subtotalLine = $d.querySelector("#subtotal");
+const cantiProd = $d.querySelector("#cantiProd");
+const totalDesc = $d.querySelector("#totalDesc");
+const lineaDescuento = $d.querySelector("#lineaDescuento");
+const botonCompra = $d.querySelector("#botonCompra");
+botonCompra.addEventListener("click", comprarBoton);
+
+// let subtotal = 0;
+
+// Llamada a funciones
+llenarDBProductos();
+mostrarCantidadCarrito();
+calcularDescuento();
 
 // Función para sumar la cantidad de productos en el carrito
 function sumarCantidadCarrito(carrito) {
   return carrito.reduce((suma, producto) => suma + producto.cantidad, 0);
 }
 
-const subtotal = document.querySelector("#subtotal");
-const columna2 = document.querySelector("#columna2");
-const numeroCarrito = document.querySelector("#numeroCarrito");
-
-// Verificar elementos en el carrito al cargar la página
-window.onpageshow = function () {
+// Obtener los datos de la API y verificar si hay elementos en el carrito que no esten en la DB
+async function llenarDBProductos() {
+  const response = await fetch(apiAddress);
+  if (!response.ok) {
+    mostrarError("Error al obtener los datos de la API");
+  }
+  const data = await response.json();
+  dbProductos = data;
   verificarElementosEnCarrito();
-};
+}
 
-// Función para renderizar el carrito
-function renderizarCarrito() {
-  carritoSelector2.innerHTML = "";
-  cantidadCarrito = sumarCantidadCarrito(carrito);
-  let contador = carrito.reduce(
+// Función para mostrar la cantidad de productos en el carrito
+function mostrarCantidadCarrito() {
+  const cantidadCarrito = sumarCantidadCarrito(carrito);
+  numeroCarrito.textContent = cantidadCarrito;
+  cantiProd.textContent = `(${cantidadCarrito} productos)`;
+}
+
+// Función para calcular si hay o no descuento y aplicarlo
+function calcularDescuento() {
+  const subtotal = carrito.reduce(
     (suma, producto) => suma + producto.precio * producto.cantidad,
     0
   );
-  let descuento =
-    contador >= 50000 ? parseInt((contador * 0.05).toFixed(0)) : 0;
-  let total = contador - descuento;
-  numeroCarrito.innerHTML = cantidadCarrito;
+  let descuento = 0;
+  let totalConDesc = subtotal;
 
-  if (carrito.length > 0) {
-    let carritoHTML2 = "";
-    carrito.forEach((producto) => {
+  if (subtotal >= 50000) {
+    descuento = (subtotal * 0.05).toFixed(0);
+    lineaDescuento.innerHTML = `
+      <div class="col s7 px-0" >Descuento del 5%</div>
+      <div class="col s5 px-0 right-align" id="descuento">-$${descuento.toLocaleString(
+        undefined
+      )}</div>
+      <p style="margin: 0;font-weight: 700;font-size: 12px;padding: 0;"> (Compra mayor a $50.000)</p>
+    `;
+    totalConDesc = subtotal - descuento;
+  } else {
+    lineaDescuento.innerHTML = "";
+  }
+  totalDesc.textContent = "$" + totalConDesc.toLocaleString(undefined);
+  subtotalLine.textContent = "$" + subtotal.toLocaleString(undefined);
+}
+
+// Función para renderizar el carrito en el HTML
+function actualizarCarrito() {
+  if (carrito.length === 0) {
+    carritoSelector2.innerHTML = `<p class="my-5 texto-xl">No hay productos en tu carrito</p>`;
+    botonCompra.disabled = true;
+    botonCompra.style.cursor = "not-allowed";
+  } else {
+    botonCompra.disabled = false;
+    botonCompra.style.cursor = "pointer";
+    const carritoHTML = carrito.map((producto) => {
       const { id, nombre, precio, cantidad, imagen } = producto;
-      carritoHTML2 += `
+      return `
       <div class="carrito21Box">
         <div class="carrito21BoxCol1">
           <img src="${imagen}" alt="Producto 2" style="max-width: 100%; height: auto" />
@@ -51,104 +112,23 @@ function renderizarCarrito() {
             <div class="atributosCart"><strong>${cantidad}</strong></div>
           </div>
           <div class="fw-700">
-          PRECIO:
-          <div class="atributosCart"><strong>$ ${(
-            precio * cantidad
-          ).toLocaleString(undefined)}</strong></div>
+            PRECIO:
+            <div class="atributosCart"><strong>$ ${(
+              precio * cantidad
+            ).toLocaleString(undefined)}</strong></div>
           </div>
         </div>
         <button class="btnEliminar" style="align-self: start;font-size:20px;color:black;" id="${id}Eliminar">x</button>
-        </div>
-        `;
+      </div>
+    `;
     });
-
-    carritoSelector2.innerHTML = carritoHTML2;
-
-    let conOSinDescuento = "";
-
-    if (contador >= 50000) {
-      conOSinDescuento = `
-     <div class="row mb-1" style="max-width: 350px; margin: 0 auto; width: 100%;color:green;" id="lineaDescuento">
-       <div class="col s7 px-0" >Descuento del 5%</div>
-       <div class="col s5 px-0 right-align" id="descuento">-$${descuento.toLocaleString(
-         undefined
-       )}</div>
-       <p style="margin: 0;font-weight: 700;font-size: 12px;padding: 0;"> (Compra mayor a $50.000)</p>
-     </div>
-<div class="row" style="margin: 2em 0 !important; font-weight: bold;max-width: 350px; width: 100%;">
-       <div class="col s7 px-0">TOTAL</div>
-       <div id="totalDesc" class="col s5 px-0 right-align">$${total.toLocaleString(
-         undefined
-       )}</div>
-     </div>
-     <button id="botonCompra" class="botonCompra" onclick="comprarBoton()">Iniciar Compra</button>
-   </div>
-   </div>
-        `;
-    } else {
-      total = contador;
-      conOSinDescuento = `   
-     <div class="row" style="margin: 2em 0 !important; font-weight: bold;max-width: 350px; width: 100%;">
-       <div class="col s7 px-0">TOTAL</div>
-       <div id="totalDesc" class="col s5 px-0 right-align">$${total.toLocaleString(
-         undefined
-       )}</div>
-     </div>
-     <button id="botonCompra" class="botonCompra" onclick="comprarBoton()">Iniciar Compra</button>
-   </div>
-   </div>
-        `;
-    }
-
-    columna2.innerHTML = "";
-    columna2.innerHTML = `
-    <div class="checkCol2-21">
-   <div class="popCarritoCheck">
-     <div class="h6 fw-700">RESUMEN DE COMPRA</div>
-             <div>(${cantidadCarrito} productos)</div>
-   </div>
-   <div class="popCarritoCheck" id="totales-cart">
-     <div class="row mb-1" style="max-width: 350px; margin: 0 auto; width: 100%">
-       <div class="col s7 px-0">Subtotal</div>
-       <div class="col s5 px-0 right-align" id="subtotal">$${contador.toLocaleString(
-         undefined
-       )}</div>
-     </div>
-     ${conOSinDescuento}
-     `;
-  } else {
-    carritoSelector2.innerHTML = `
-    <p class="my-5 texto-xl">No hay productos en tu carrito</p>
-          `;
-
-    columna2.innerHTML = `
-          <div class="checkCol2-21">
-         <div class="popCarritoCheck">
-           <div class="h6 fw-700">RESUMEN DE COMPRA</div>
-                   <div>(${cantidadCarrito} productos)</div>
-         </div>
-         <div class="popCarritoCheck" id="totales-cart">
-           <div class="row mb-1" style="max-width: 350px; margin: 0 auto; width: 100%">
-             <div class="col s7 px-0">Subtotal</div>
-             <div class="col s5 px-0 right-align" id="subtotal">$${contador.toLocaleString(
-               undefined
-             )}</div>
-           </div>
-           <div class="row" style="margin: 2em 0 !important; font-weight: bold;max-width: 350px; width: 100%;">
-           <div class="col s7 px-0">TOTAL</div>
-           <div id="totalDesc" class="col s5 px-0 right-align">$0</div>
-         </div>
-         <button id="botonCompra" onclick="comprarBoton()" class="botonCompra">Iniciar Compra</button>
-       </div>
-       </div>
-           `;
+    carritoSelector2.innerHTML = carritoHTML.join("");
   }
 }
 
 // Función para eliminar un producto del carrito
 function eliminarDelCarrito(id) {
   const item = carrito[id];
-
   if (item.cantidad > 1) {
     item.cantidad--;
   } else {
@@ -156,61 +136,108 @@ function eliminarDelCarrito(id) {
   }
 
   if (carrito.length === 0) {
-    localStorage.removeItem("carrito");
+    miLocalStorage.removeItem("carrito");
   } else {
-    localStorage.carrito = JSON.stringify(carrito);
+    miLocalStorage.carrito = JSON.stringify(carrito);
   }
-
-  renderizarCarrito();
+  mostrarCantidadCarrito();
+  actualizarCarrito();
+  calcularDescuento();
 }
 
-// Renderizar el carrito al cargar la página
-renderizarCarrito();
-
-// Evento click para eliminar un producto del carrito
-document.addEventListener("click", (e) => {
+// Evento para eliminar un producto del carrito al hacer click en el botón de eliminar
+$d.addEventListener("click", (e) => {
   if (e.target.classList.contains("btnEliminar")) {
     const id = e.target.id.replace("Eliminar", "");
-    const productoBusqueda = carrito.findIndex(
-      (producto) => producto.id === parseInt(id)
-    );
-    eliminarDelCarrito(productoBusqueda);
+    const buscarProducto = carrito.findIndex((producto) => producto.id === id);
+    eliminarDelCarrito(buscarProducto);
   }
 });
 
-// Verificar elementos en el carrito
+// Verificar si los elementos en el carrito existen en la base de datos de productos
 function verificarElementosEnCarrito() {
   if (!carrito) {
     console.log("El carrito está vacío.");
     return;
   }
-
   const elementosNoEncontrados = carrito.filter(
     (elementoCarrito) =>
       !dbProductos.some((producto) => producto.id === elementoCarrito.id)
   );
-
   if (elementosNoEncontrados.length === 0) {
     console.log("Todos los elementos en el carrito están en dbProductos.");
-    console.log(carrito);
-    console.log(dbProductos);
   } else {
     console.log(
       "Los siguientes elementos en el carrito no se encontraron en dbProductos:"
     );
-
+    let resultadoConcatenado = "";
     elementosNoEncontrados.forEach((elemento) => {
+      resultadoConcatenado += "- " + elemento.nombre + "\n";
       console.log(`- ID: ${elemento.id}, Nombre: ${elemento.nombre}`);
-      const productoBusqueda = carrito.findIndex(
-        (producto) => producto.id === parseInt(elemento.id)
+      const buscarProducto = carrito.findIndex(
+        (producto) => producto.id === elemento.id
       );
-      eliminarDelCarrito(productoBusqueda);
-      console.log("producto eliminado");
+      eliminarDelCarrito(buscarProducto);
     });
+    Toastify({
+      text: `Hay falta de stock de alguno/s de los productos que tenias en el carrito y por lo tanto se han eliminado los siguientes:
+
+      ${resultadoConcatenado}`,
+      duration: 3000,
+      position: "center",
+      gravity: "bottom",
+      style: {
+        background: "linear-gradient(to right, #00b09b, #96c93d)",
+      },
+    }).showToast();
   }
 }
 
-// Función para el botón de comprar
+// Actualizar el carrito
+actualizarCarrito();
+
+// Función para redirigir a la página de pago
 function comprarBoton() {
-  Swal.fire("Proximamente...");
+  window.location.href = "./pay.html";
+}
+
+// Mostrar un mensaje de error en una alerta
+function mostrarError(mensaje) {
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "center-end",
+    showConfirmButton: false,
+    timer: 2500,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
+  Toast.fire({
+    icon: "error",
+    title: mensaje,
+  });
+}
+
+// Mostrar una alerta
+function mostrarAlerta(mensaje, icono) {
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "center-end",
+    customClass: {
+      popup: "colored-toast",
+    },
+    showConfirmButton: false,
+    timer: 2500,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
+  Toast.fire({
+    icon: icono,
+    html: `<label style='color: black;'>${mensaje}</label>`,
+  });
 }

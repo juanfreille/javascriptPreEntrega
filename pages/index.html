@@ -23,6 +23,11 @@
       href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.28/dist/sweetalert2.min.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
     <link href="../assets/css/styles.css" rel="stylesheet" type="text/css" />
     <link
       href="../assets/img/favicon_io/favicon.ico"
@@ -63,8 +68,8 @@
               >
             </li>
             <li>
-              <a href="./index.html"
-                ><i class="fa fa-house fa-mio"></i>Tienda</a
+              <a href="./index.html" class="header__pagina-activa"
+                ><i class="fa fa-shop fa-mio"></i>Tienda</a
               >
             </li>
           </ul>
@@ -112,7 +117,7 @@
           </select>
         </div>
         <div class="row row-mio no-selection">
-          <div class="productos"></div>
+          <div class="productos"><div class="spinner"></div></div>
         </div>
       </section>
     </section>
@@ -126,8 +131,18 @@
       <div class="content-cart"></div>
       <div class="row" style="font-weight: bold" id="subtotal"></div>
       <div style="display: flex">
-        <button id="btnVaciar" class="botonCompra botonVaciar">Vaciar</button>
-        <button id="btnIrAlCarrito" class="btn-primary botonCompra">
+        <button
+          id="btnVaciar"
+          class="botonCompra botonVaciar"
+          style="-webkit-text-stroke: 0.2px"
+        >
+          Vaciar
+        </button>
+        <button
+          id="btnIrAlCarrito"
+          class="btn-primary botonCompra"
+          style="-webkit-text-stroke: 0.2px"
+        >
           Ir al Carrito
         </button>
       </div>
@@ -203,7 +218,10 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.28/dist/sweetalert2.all.min.js"></script>
-
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
     <script src="../js/index.js"></script>
   </body>
 </html>

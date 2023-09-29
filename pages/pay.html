@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="JIF Style es una tienda online de indumentaria casual, homewear, streetwear, y ropa urbana. Prendas perdurables, en donde priman la comodidad y el estilo."
+    />
+    <meta
+      name="keywords"
+      content="ecommerce, hombre, remeras, camperas, jeans, pantalones, chombas, casmisas, descuentos, ofertas, eshop, indumentaria, ropa"
+    />
+    <title>JIF STYLE STORE - Pago</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.28/dist/sweetalert2.all.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.28/dist/sweetalert2.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <link href="../assets/css/styles.css" rel="stylesheet" type="text/css" />
+    <link
+      href="../assets/img/favicon_io/favicon.ico"
+      rel="shortcut icon"
+      type="image/x-icon"
+    />
+    <script
+      src="https://kit.fontawesome.com/4e9044019f.js"
+      crossorigin="anonymous"
+    ></script>
+
+  </head>
+  <body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"
+    ></script>
+    <div class="minibar-top no-selection" style="font-weight: bold">
+      5% de descuento en compras mayores a 50.000
+    </div>
+    <!-- SECCION DEL HEADER Y NAVBAR -->
+    <header class="fuente-copada">
+      <!-- LOGO A AL IZQUIERDA -->
+      <a id="header__logo-pc" href="./index.html">
+        <img
+          src="../assets/img/Logo-bg.webp"
+          width="84"
+          height="43"
+          alt="logo de jifstyle"
+        />
+      </a>
+      <!-- RESTO DEL MENU -->
+      <div class="header__links">
+        <nav>
+          <input type="checkbox" id="header__check" />
+          <label for="header__check" class="bar-btn">
+            <i class="fa fa-bars"></i>
+          </label>
+          <ul class="header__nav-menu texto-xs">
+            <li>
+              <a href="./formulario.html">
+                <i class="fa fa-envelope fa-mio"></i>Administrar Ropa (ADMIN)</a
+              </a>
+            </li>
+            <li>
+              <a href="./index.html">
+                <i class="fa fa-shop fa-mio"></i>Tienda
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <!-- LOGO MOBILE AL CENTRO -->
+        <a id="header__logo-mobile" href="./index.html">
+          <img
+            src="../assets/img/Logo-bg.webp"
+            width="85"
+            height="43"
+            alt="logo de jifstyle"
+          />
+        </a>
+        <!-- PANEL DE USUARIO, CARRITO, REGISTRAR NUEVO USUARIO O LOGUEARSE -->
+        <div class="vr ocultar-mobile vr-mio"></div>
+        <div class="header__nav-user">
+          <a href="./cart.html" class="carrito-text">
+            <img
+              src="../assets/img/carrito.webp"
+              alt="carrito de compras"
+              class="imagen-carrito"
+            />
+            <span id="numeroCarrito" class="badge rounded-circle">0</span>
+            <div class="carrito-nav fuente-copada texto-xs">MI CARRITO</div>
+          </a>
+        </div>
+      </div>
+    </header>
+    <main>
+      <!-- SECCION ENCABEZADO -->
+      <div class="banner-encabezado centrar-texto">
+        <h1 class="encabezado-grande texto-xxl">Carrito de compras</h1>
+      </div>
+      <h2 class="title fuente-copada">Datos de cliente</h2>
+    </main>
+
+    <div class="container">
+        <div class="row">
+          <div id="columna">
+            <div class="form-body">
+                <div class="row">
+                  <div class="form-holder" style="align-items: stretch;">
+                    <div class="form-content" style="display: block;">
+                      <div >
+                        <h3 class="infoH3">INFORMACIÓN DE ENTREGA</h3>
+                        <p class="ocultar-mobile">Completar los campos</p>
+                        <form id="formularioPagar" novalidate class="formuS">
+                          <div class="col-md-12 split col-padding">
+                            <input
+                              class="form-control"
+                              type="text"
+                              id="nombre"
+                              name="nombre"
+                              placeholder="Nombre"
+                              required
+                            />
+                          </div>
+                          <div class="col-md-12 split col-padding">
+                            <input
+                              class="form-control"
+                              type="text"
+                              id="apellido"
+                              name="apellido"
+                              placeholder="Apellido"
+                              required
+                            />
+                          </div>
+                          <div class="col-md-12 split2 col-padding">
+                            <input
+                              class="form-control"
+                              type="text"
+                              id="calle"
+                              name="calle"
+                              placeholder="Calle"
+                              required
+                            />
+                            <label style="margin: 0 1% 1% 1%;font-size: 13px;text-align: start;"
+                              >Ej.: Marcelo Garlot</label
+                            >
+                          </div>
+          
+                          <div class="col-md-12 split col-padding">
+                              <input
+                                class="form-control"
+                                type="text"
+                                id="numeracion"
+                                name="numeracion"
+                                placeholder="Número"
+                                required
+                              />
+                            </div>
+          
+                            <div class="col-md-12 split col-padding">
+                              <input
+                                class="form-control"
+                                type="text"
+                                id="codPostal"
+                                name="codigoPostal"
+                                placeholder="Código Postal"
+                                required
+                              />
+          
+                            <label style="margin: 0 1% 1% 1%;font-size: 13px;text-align: start;"
+                              >Ej.: 5000 o A2532AAA
+                              </label
+                            >
+          
+                            </div>
+                            
+                          <div class="col-md-12 split col-padding">
+                            <select class="form-select mt-3" required id="provincia">
+                              <option selected disabled value="">Provincia</option>
+          
+                              <option value="San Juan">San Juan</option>
+                              <option value="San Luis">San Luis</option>
+                              <option value="Santa Fe">Santa Fe</option>
+                              <option value="Santiago del Estero">Santiago del Estero</option>
+                              <option value="Tucuman">Tucuman</option>
+                              <option value="Chaco">Chaco</option>
+                              <option value="Chubut">Chubut</option>
+                              <option value="Formosa">Formosa</option>
+                              <option value="Misiones">Misiones</option>
+                              <option value="Neuquen">Neuquen</option>
+                              <option value="La Pampa">La Pampa</option>
+                              <option value="Rio Negro">Rio Negro</option>
+                              <option value="Santa Cruz">Santa Cruz</option>
+                              <option value="Tierra del Fuego">Tierra del Fuego</option>
+                              <option value="Capital Federal">Capital Federal</option>
+                              <option value="Buenos Aires">Buenos Aires</option>
+                              <option value="Catamarca">Catamarca</option>
+                              <option value="Cordoba">Cordoba</option>
+                              <option value="Corrientes">Corrientes</option>
+                              <option value="Entre Rios">Entre Rios</option>
+                              <option value="Jujuy">Jujuy</option>
+                              <option value="Mendoza">Mendoza</option>
+                              <option value="La Rioja">La Rioja</option>
+                              <option value="Salta">Salta</option>
+          
+                            </select>
+                          </div>
+          
+                          <div class="col-md-12 split col-padding">
+                              <input
+                                class="form-control"
+                                type="text"
+                                id="localidad"
+                                name="localidad"
+                                placeholder="Localidad"
+                                required
+                              />
+                            </div>
+                            <h3 style="margin-top:10%" class="infoH3">INFORMACIÓN DE CONTACTO</h3>
+                            <p class="ocultar-mobile">Usaremos tus datos para informarte sobre la entrega.</p>
+              
+                            <div class="col-md-12 split2 col-padding">
+                              <input
+                                class="form-control"
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="Correo electrónico"
+                                required
+                              />
+                            </div>
+          
+                            <div class="col-md-12 split2 col-padding">
+                              <input
+                                class="form-control"
+                                type="text"
+                                id="telefono"
+                                name="telefono"
+                                placeholder="Teléfono"
+                                required
+                              />
+                            </div>
+          
+                            <div class="col-md-12 split2 col-padding">
+                              <input
+                                class="form-control"
+                                type="text"
+                                id="dni"
+                                name="dni"
+                                placeholder="Número de DNI"
+                                required
+                              />
+                            </div>
+          
+          
+                          <div class="form-button mt-3 fit-content">
+                            <button
+                              id="btnPagar"
+                              type="submit"
+                              class="btn btn-primary fit-content"
+                            >
+                              Iniciar pago
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+          </div>
+          <div id="columna2">
+
+                <div class="checkCol2-21">
+               <div class="popCarritoCheck">
+                 <div class="h6 fw-700">RESUMEN DE COMPRA</div>
+                         <div id="cantiProd">(0 productos)</div>
+               </div>
+               
+               <div id="columna3">
+
+               </div>
+
+               <div class="row mb-1" style="max-width: 350px; margin: 0 auto; width: 100%;font-weight: 600;">
+                <div class="col s7 px-0">Subtotal</div>
+                <div class="col s5 px-0 right-align" id="subtotal"></div>
+              </div>
+  
+
+               <div class="row mb-1" style="max-width: 350px; margin: 0 auto; width: 100%;color:green;;font-weight: 600;" id="lineaDescuento">
+              </div>
+
+
+               <div class="row" style="margin: 2em 0 !important; font-weight: bold;max-width: 350px; width: 100%;">
+                <div class="col s7 px-0">TOTAL</div>
+                <div id="totalDesc" class="col s5 px-0 right-align">$${total.toLocaleString(undefined)}</div>
+              </div>
+         
+
+
+
+
+
+
+            </div>
+
+
+             </div>
+
+          </div>
+        </div>
+      </div>
+
+
+      <!-- SECCION DEL FOOTER, DONDE UBICAMOS REDES SOCIALES, AGREGAR ENLACES MAS ADELANTE -->
+    <footer class="footer_style">
+      <a
+        href="https://www.facebook.com/jifstylestore/"
+        target="_blank"
+        class="fa fa-facebook"
+        aria-hidden="true"
+      ></a>
+      <a
+        href="https://twitter.com/jifstylestore"
+        target="_blank"
+        class="fa fa-twitter"
+        aria-hidden="true"
+      ></a>
+      <a
+        href="https://ar.linkedin.com/company/jifstyle"
+        target="_blank"
+        class="fa fa-linkedin"
+        aria-hidden="true"
+      ></a>
+      <a
+        href="https://www.youtube.com/channel"
+        target="_blank"
+        class="fa fa-youtube"
+        aria-hidden="true"
+      ></a>
+      <a
+        href="https://www.instagram.com/jifstylestore/"
+        target="_blank"
+        class="fa fa-instagram"
+        aria-hidden="true"
+      ></a>
+    </footer>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    
+    <script src="../js/pay.js"></script>
+
+  </body>
+</html>
